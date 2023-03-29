@@ -1,0 +1,37 @@
+.container {
+    margin: auto;
+    width: 80%;
+    padding: 32px;
+}
+
+.mat-card-header {
+    background-color: #627ffc;
+    width: 100%;
+}
+
+.add-button {
+    background: transparent;
+    border: none;
+    margin-top: -1%;
+}
+
+:host::ng-deep .processTable>thead {
+    background-color: #dcdde0;
+}
+
+.element-row {
+    position: relative;
+    cursor: pointer;
+}
+
+.element-row:hover {
+    background: #f5f5f5 !important;
+}
+
+.status-row {
+    color: green;
+}
+
+.priority-row {
+    color: red;
+}

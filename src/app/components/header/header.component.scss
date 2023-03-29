@@ -1,0 +1,10 @@
+// @import './styles/variables.scss';
+
+:host::ng-deep .face-icon {
+    background: transparent;
+    border: none;
+}
+
+.header-toolbar {
+    background-color: #627ffc;
+}

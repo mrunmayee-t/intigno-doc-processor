@@ -1,5 +1,8 @@
 // @import './styles/variables.scss';
 
+*{
+    color: white;
+}
 :host::ng-deep .face-icon {
     background: transparent;
     border: none;

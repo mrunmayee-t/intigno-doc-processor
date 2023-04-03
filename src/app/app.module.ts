@@ -13,6 +13,7 @@ import { MaterialModule } from './material/material.module';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { RequestsComponent } from './components/requests/requests.component';
 import { AddRequestsComponent } from './components/requests/add-requests/add-requests.component';
+import { AddItemComponent } from './components/requests/add-requests/add-item/add-item.component';
 
 
 
@@ -23,7 +24,8 @@ import { AddRequestsComponent } from './components/requests/add-requests/add-req
     HeaderComponent,
     AddProcessComponent,
     RequestsComponent,
-    AddRequestsComponent
+    AddRequestsComponent,
+    AddItemComponent
   ],
   imports: [
     BrowserModule,

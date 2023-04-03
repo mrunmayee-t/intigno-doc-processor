@@ -1,3 +1,8 @@
+
+mat-card-header{
+    color: white;;
+}
+
 .container {
     margin: auto;
     width: 80%;
@@ -10,9 +15,10 @@
 }
 
 .add-button {
-    background: transparent;
+    background: white;
     border: none;
     margin-top: -1%;
+    color: black;
 }
 
 :host::ng-deep .processTable>thead {

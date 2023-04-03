@@ -1,0 +1,24 @@
+<div>
+    <div style="padding-bottom: 2%;">
+        <span >
+            {{items.no}} {{ items.itemName ? items.itemName : '(Item Name)'  }}
+        </span>
+    </div>
+    <form [formGroup]="addItemsForm">
+        <mat-form-field appearance="fill" class="form-field">
+            <mat-label>
+                Item Name
+            </mat-label>
+            <input matInput placeholder="Item Name (e.g. Photo ID, Bank Statement, etc.)" formControlName="itemName" [(ngModel)]="items.itemName"/>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="form-field">
+            <mat-label>
+                Item Description/Instructions (optional)
+            </mat-label>
+            <input matInput placeholder="Item Description/Instructions (optional)" formControlName="description" />
+        </mat-form-field>
+        <!-- <mat-form-field class="form-field"> -->
+            <mat-checkbox formControlName="required">Required</mat-checkbox>
+        <!-- </mat-form-field> -->
+    </form>
+</div>

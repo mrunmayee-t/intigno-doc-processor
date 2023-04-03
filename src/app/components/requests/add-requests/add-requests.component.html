@@ -1,46 +1,101 @@
-<div>
-    <h2 mat-dialog-title>Add New Request</h2>
-    <mat-dialog-content>
-        <form [formGroup]="addRequestForm">
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-select [(value)]="selected" placeholder="Status">
-                    <mat-option *ngFor="let status of statuses" [value]="status.id">{{status.statusName}}</mat-option>
-                </mat-select>
+<app-header></app-header>
+<div class="container" fxLayout="column" fxLayoutAlign="space-between center">
+  <div class="container" fxLayout="row" fxLayoutAlign="space-between">
+    <div class="create-request-card">
+      <mat-card>
+        <mat-card-header
+          class="mat-card-header"
+          fxLayout="row"
+          fxLayoutAlign="space-between center">
+          <mat-card-title>Create New Requests</mat-card-title>
+        </mat-card-header>
+        <div class="form-div">
+          <form [formGroup]="addRequestForm">
+            <mat-form-field class="form-field">
+              <mat-label> Request Title </mat-label>
+              <input
+                matInput
+                placeholder="Enter title"
+                formControlName="title"
+              />
             </mat-form-field>
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>
-                    Add Title
-                </mat-label>
-                <input matInput placeholder="Enter title" formControlName="title" />
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>
-                    Add Description
-                </mat-label>
-                <input matInput placeholder="Enter description" formControlName="description" />
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>
-                    Due Date
-                </mat-label>
-                <input matInput [matDatepicker]="dp1" formControlName="dueDate">
-                <mat-datepicker-toggle matSuffix [for]="dp1"></mat-datepicker-toggle>
-                <mat-datepicker #dp1></mat-datepicker>
-            </mat-form-field>
-            <mat-form-field appearance="fill" class="form-field">
-                <mat-label>
-                    Priority
-                </mat-label>
-                <input matInput placeholder="Enter priority" formControlName="priority" />
-            </mat-form-field>
-        </form>
-    </mat-dialog-content>
-    <mat-dialog-actions fxLayout="row" fxLayoutAlign="end">
-        <button mat-raised-button (click)="dialogRef.close(false)" class="add-request-btn">
-            Close
-        </button>
-        <button mat-raised-button class="add-request-btn" (click)="createRequest(addRequestForm.value)">
-            Create
-        </button>
-    </mat-dialog-actions>
+          </form>
+          <div class="item-divider-div">
+            <mat-label> Add items to Checklist: </mat-label>
+          </div>
+          <div id="submit" [formGroup]="addItemsForm">
+            <div formArrayName="items">
+              <div
+                *ngFor="let row of aliasesArrayControl;let i = index">
+                <div [formGroupName]="i">
+                  <div class="item-divider"></div>
+                  <div style="padding-bottom: 2%; padding-top:2%" fxLayout="row" fxLayoutAlign="space-between end">
+                    <span>
+                      {{ i+1 }}
+                      {{ row.get('itemName')?.value ? row.get('itemName')?.value : "(Item Name)" }}
+                    </span>
+                    <button mat-icon-button matTooltip="Click to Delete" class="delete-button" 
+                    (click)="removeItem(i)">
+                    <mat-icon>delete_outline</mat-icon>
+                  </button>
+                  </div>
+                  <!-- <form [formGroup]="addItemsForm"> -->
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label> Item Name </mat-label>
+                    <input
+                      matInput
+                      placeholder="Item Name (e.g. Photo ID, Bank Statement, etc.)"
+                      formControlName="itemName"
+                    />
+                  </mat-form-field>
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>
+                      Item Description/Instructions (optional)
+                    </mat-label>
+                    <input
+                      matInput
+                      placeholder="Item Description/Instructions (optional)"
+                      formControlName="description"
+                    />
+                  </mat-form-field>
+                  <!-- <mat-form-field class="form-field"> -->
+                  <mat-checkbox formControlName="required" (change)="requireCheckboxChecked(i,$event)"
+                    >Required</mat-checkbox
+                  >
+                  <!-- </mat-form-field> -->
+                  <!-- </form> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    <div class="checklist-card">
+      <mat-card style="height: 100%">
+        <mat-card-header
+          class="mat-card-header"
+          fxLayout="row"
+          fxLayoutAlign="space-between center">
+          <mat-card-title>Checklist</mat-card-title>
+        </mat-card-header>
+        <span class="required-item">{{requiredCheckbox}} Required Items</span>
+        <ul>
+          <li *ngFor="let value of aliasesArrayControl;let i = index" class="check-list">{{ i+1+'.' }}  {{ ' '+value.get('itemName')?.value ? value.get('itemName')?.value : "" }}</li>
+        </ul>
+      </mat-card>
+    </div>
+  </div>
+  <div fxLayout="row" fxLayoutAlign="space-between center" class="btn-div">
+    <button
+      mat-raised-button
+      class="add-item-btn"
+      style="margin-left: 13%"
+      (click)="addItem()">
+      + Add Item
+    </button>
+    <button mat-raised-button class="add-item-btn" style="margin-right: 13%" (click)="addRecipients()">
+      Continue
+    </button>
+  </div>
 </div>

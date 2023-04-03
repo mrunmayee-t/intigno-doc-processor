@@ -1,24 +1,23 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AddProcessComponent } from '../add-process/add-process.component';
 
 export interface ProcessElement {
-  no: number;
-  processName: string;
-  description: string;
-  primaryEmail: string;
-  dueDate: string
+  requestName: string;
+  recipient: string;
+  requester: string;
+  dueDate: string;
 }
 
 const ELEMENT_DATA: ProcessElement[] = [
-  { no: 1, processName: 'Saurabh Visal', description: 'Some description', primaryEmail: 'saurabh.visal@abc.com', dueDate: '18/03/2023' },
-  { no: 2, processName: 'Neeraj Visal', description: 'Tax document submission', primaryEmail: 'neerajvisal@abc.com', dueDate: '18/03/2023' },
-  { no: 3, processName: 'Soham Bhute', description: 'Company registration', primaryEmail: 'soham_bhute@abc.com', dueDate: '18/03/2023' },
-  { no: 4, processName: 'David Smith', description: 'Create LLP', primaryEmail: 'd.smith@abc.com', dueDate: '18/03/2023' },
-  { no: 5, processName: 'Johnny Depp', description: 'TAX filing', primaryEmail: 'jd@abc.com', dueDate: '18/03/2023' }
+  {  requestName:  'Some description', recipient: 'Saurabh Visal', requester: 'saurabh.visal@abc.com', dueDate: '18/03/2023' },
+  { requestName: 'Tax document submission', recipient: 'Neeraj Visal', requester: 'neerajvisal@abc.com', dueDate: '18/03/2023' },
+  { requestName: 'Company registration', recipient:  'Soham Bhute', requester: 'soham_bhute@abc.com', dueDate: '18/03/2023' },
+  { requestName: 'Create LLP', recipient: 'David Smith', requester: 'd.smith@abc.com', dueDate: '18/03/2023' },
+  { requestName: 'TAX filing', recipient: 'Johnny Depp', requester: 'jd@abc.com', dueDate: '18/03/2023' }
 
 ];
 @Component({
@@ -27,42 +26,57 @@ const ELEMENT_DATA: ProcessElement[] = [
   styleUrls: ['./home.component.scss']
 })
 
-export class HomeComponent {
-  displayedColumns: string[] = ['no', 'processName', 'description', 'primaryEmail', 'dueDate'];
+export class HomeComponent implements OnInit{
+  displayedColumns: string[] = [ 'requestName', 'recipient', 'requester', 'dueDate', 'delete'];
   processData = ELEMENT_DATA;
   dataFromDialog: any;
-  no = this.processData[this.processData.length - 1].no;
   @ViewChild(MatTable, { static: true }) processTable!: MatTable<any>;
-  constructor(private dialog: MatDialog, private router: Router) {
+  constructor(private dialog: MatDialog, private router: Router, private route: ActivatedRoute) {
 
   }
 
+  ngOnInit() {
+    // this.route.queryParams.subscribe(
+    //   params => {
+    //     this.processData.push(JSON.parse(params['userData']))
+    //   });
+    //   this.processTable.renderRows();
+  }
   addProcess() {
-    const dialogRef = this.dialog.open(AddProcessComponent, {
-      width: '450px',
-      height: '500px'
-    });
+    const options = {queryParams: {userData: JSON.stringify(this.processData)}};
+    this.router.navigate(['create-requests/'],options);
+    // const dialogRef = this.dialog.open(AddProcessComponent, {
+    //   width: '450px',
+    //   height: '500px'
+    // });
 
-    dialogRef.afterClosed().subscribe((data) => {
-      this.dataFromDialog = data.form;
-      this.no = this.no + 1;
-      this.processData.push({
-        no: this.no,
-        processName: this.dataFromDialog.controls.processName.value,
-        description: this.dataFromDialog.controls.description.value,
-        primaryEmail: this.dataFromDialog.controls.primaryEmail.value,
-        dueDate: this.dataFromDialog.controls.dueDate.value
-      });
-      this.processTable.renderRows();
-      this.router.navigate(['requests/']);
-      if (data.clicked === 'submit') {
-        console.log('Sumbit button clicked');
-      }
-    });
+    // dialogRef.afterClosed().subscribe((data) => {
+    //   this.dataFromDialog = data.form;
+    //   this.processData.push({
+    //     requestName: this.dataFromDialog.controls.processName.value,
+    //     recipient: this.dataFromDialog.controls.description.value,
+    //     requester: this.dataFromDialog.controls.primaryEmail.value,
+    //     dueDate: this.dataFromDialog.controls.dueDate.value
+    //   });
+    //   this.processTable.renderRows();
+    //   this.router.navigate(['requests/']);
+    //   if (data.clicked === 'submit') {
+    //     console.log('Sumbit button clicked');
+    //   }
+    // });
   }
 
   rowClicked(row: any) {
     console.log(row)
     this.router.navigate(['requests/'], row);
+  }
+
+  deleteRow(elment: any){
+
+  }
+
+  setRecipientData(event: any){
+    this.processData.push(event)
+    this.processTable.renderRows();
   }
 }

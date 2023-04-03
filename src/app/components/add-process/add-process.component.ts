@@ -1,47 +1,71 @@
 import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatTable } from '@angular/material/table';
+
 
 @Component({
   selector: 'app-add-process',
   templateUrl: './add-process.component.html',
   styleUrls: ['./add-process.component.scss']
 })
-export class AddProcessComponent {
+export class AddProcessComponent implements OnInit{
   addProcessForm: FormGroup;
-
-  constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<AddProcessComponent>) {
+  userData: any = [];
+  displayedColumns: string[] = [ 'name',  'email','delete'];
+  recipientsObj: any = [];
+  recipientCount: any = 1;
+  @ViewChild(MatTable, { static: true }) recipientTable!: MatTable<any>;
+  constructor(private fb: FormBuilder, public dialogRef: MatDialogRef<AddProcessComponent>,@Inject(MAT_DIALOG_DATA) public data: any) {
     this.addProcessForm = this.fb.group({
-      processName: ['', Validators.required],
-      description: ['', Validators.required],
-      primaryEmail: ['', Validators.required],
-      dueDate: ['', Validators.required]
+      firstName: ['', Validators.required],
+      email: ['', Validators.required],
+      lastName: ['', Validators.required]
     })
   }
 
-  createProcess(form: NgForm) {
-    if (this.addProcessForm.valid) {
-      this.addProcessForm.controls['dueDate'].setValue(this.convertDate(this.addProcessForm.controls['dueDate'].value));
-      this.dialogRef.close({
-        clicked: 'submit',
-        form: this.addProcessForm
+  ngOnInit() {
+    this.data.userData.forEach((element: { recipient: any; requester: any; }) => {
+      this.userData.push({
+        recipient: element.recipient,
+        requester: element.requester
       })
-    }
-    else {
-
-    }
+      
+    })
+    
+  }
+  createProcess(form: NgForm) {
+    this.dialogRef.close({
+      clicked: 'submit',
+      form: this.recipientsObj
+    })
   }
 
-  convertDate(dueDate: any) {
-    let yyyy = dueDate.getFullYear();
-    let mm = dueDate.getMonth() + 1;
-    let dd = dueDate.getDate();
+  addRecipient(form: FormGroup){
+    // this.userData.push({
+    //   recipient: this.addProcessForm.get('firstName')?.value + ' ' + this.addProcessForm.get('lastName')?.value,
+    //   requester: this.addProcessForm.get('email')?.value
+    //   })
+      this.recipientsObj.push({
+          no: this.recipientCount++,
+          recipientName: this.addProcessForm.get('firstName')?.value + ' ' + this.addProcessForm.get('lastName')?.value, 
+          recipientEmail: this.addProcessForm.get('email')?.value 
+      })
+     // this.recipientTable.renderRows();
+  }
 
-    if (dd < 10) dd = '0' + dd;
-    if (mm < 10) mm = '0' + mm;
+  rowClicked(row: any){
+    this.recipientsObj.push({
+      no: this.recipientCount++,
+      recipientName: row.recipient,
+      recipientEmail: row.requester 
+    })
+  }
 
-    dueDate = dd + '/' + mm + '/' + yyyy
-    return dueDate;
+  deleteRecipient(i: any){
+    this.recipientCount = this.recipientsObj.length
+    this.recipientsObj[i+1].no = this.recipientCount-1
+    this.recipientsObj.splice(i,1);
   }
 }

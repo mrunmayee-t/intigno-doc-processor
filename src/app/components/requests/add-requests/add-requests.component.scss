@@ -6,3 +6,58 @@
     background-color: #627ffc;
     padding: 1px;
 }
+.item-divider{
+    border: 1px solid;
+}
+.container {
+    margin: auto;
+    width: 80%;
+    padding: 32px;
+}
+.mat-card-header {
+    background-color: #627ffc;
+    width: 100%;
+}
+.form-div{
+    padding: 1%;
+}
+.create-request-card{
+    width: 70%;
+    padding:1%;
+}
+
+.checklist-card{
+    width: 30%;
+    padding: 1%;
+}
+
+.item-divider-div{
+    padding-top: 1%;
+    padding-bottom: 3%;
+}
+ul{
+    list-style-type:none
+};
+
+.add-item-btn{
+    background-color: #627ffc !important;
+    color: white !important;
+}
+
+.btn-div{
+    width: 100%;
+}
+
+mat-card-header{
+    color: white;
+}
+
+.check-list{
+    font-size: 18px;
+    padding: 5%;
+}
+
+.required-item{
+    padding: 5%;
+    font-size: 18px;
+}
